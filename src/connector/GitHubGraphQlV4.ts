@@ -16,7 +16,7 @@ export class GitHubGraphQlV4 implements IGitHubConnector {
 
   constructor() {
     this.config = Config.getConfig();
-    this.logger = new Logger('connector:GitHubGraphQlv4');
+    this.logger = new Logger('GitHubGraphQlv4');
     this.setCredentials(this.config.github_connector.credentials);
     this.query = /* GraphQL */ `
       query($username: String!, $number_of_repos: Int) {

@@ -12,7 +12,7 @@ export class GitHubRestApiV3 implements IGitHubConnector {
 
   constructor() {
     this.config = Config.getConfig();
-    this.logger = new Logger('connector:GitHubRestApiV3');
+    this.logger = new Logger('GitHubRestApiV3');
     this.axiosConfig = {
       auth: {
         password: this.config.github_connector.credentials.password,
