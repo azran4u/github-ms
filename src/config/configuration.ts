@@ -10,8 +10,8 @@ export interface IConfig {
     logLevel: string;
   };
   server: {
-    port: number
-  }
+    port: number;
+  };
 }
 
 export interface GitHubCredentials {
@@ -22,7 +22,7 @@ export interface GitHubCredentials {
 
 export enum ApiMethod {
   RESTv3,
-  GRAPHQLv4,
+  GRAPHQLv4
 }
 
 export class Config {
@@ -49,14 +49,14 @@ export class Config {
         credentials: {
           password: process.env.GITHUB_PASSWORD,
           username: process.env.GITHUB_USERNAME,
-          token: process.env.GITHUB_TOKEN,
-        },
+          token: process.env.GITHUB_TOKEN
+        }
       },
       logger: {
-        logLevel: process.env.LOG_LEVEL || 'info',
+        logLevel: process.env.LOG_LEVEL || 'info'
       },
       server: {
-        port: process.env.SERVER_PORT ? +process.env.SERVER_PORT : 3000,
+        port: process.env.SERVER_PORT ? +process.env.SERVER_PORT : 3000
       }
     };
   }
