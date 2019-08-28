@@ -73,7 +73,7 @@ export class GitHubGraphQlV4 implements IGitHubConnector {
       this.logger.debug(parsed);
       return parsed;
     } catch (error) {
-      this.logger.error(`fetch user failed. ${(error as Error).message}`);
+      this.logger.error(`fetch user failed. ${error.response.message}`);
       this.logger.debug(error);
       throw new Error('Couldn\'t fetch user');
     }

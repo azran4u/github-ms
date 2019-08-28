@@ -42,7 +42,7 @@ export class GitHubRestApiV3 implements IGitHubConnector {
       this.logger.debug(user);
       return user;
     } catch (error) {
-      this.logger.error(`fetch user failed. ${(error as Error).message}`);
+      this.logger.error(`fetch user failed. ${error.response.data.message}`);
       this.logger.debug(error);
       throw new Error('Couldn\'t fetch user');
     }
@@ -51,7 +51,6 @@ export class GitHubRestApiV3 implements IGitHubConnector {
   private async getUserDetails(): Promise<User> {
     try {
       const data = await axios.get<any>('/user', this.axiosConfig);
-      data.data.id = 'eyal';
       const validated = await this.userInfoInputValidation(data.data);
       const parsed = this.parseUserData(validated);
       this.logger.info('got user details');

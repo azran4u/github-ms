@@ -27,11 +27,22 @@ export class Config {
   private static instance: Config;
 
   private constructor() {
+    this.config = Config.readEnvVars();
+  }
+
+  public static readEnvVars(): IConfig {
     dotenv.config();
-    this.config = {
+
+    return {
       github_connector: {
-        apiMethod: ApiMethod.GRAPHQLv4,
-        baseUrl: 'https://api.github.com',
+        apiMethod: process.env.GITHUB_API_METHOD
+          ? process.env.GITHUB_API_METHOD.toString() === 'graphql'
+            ? ApiMethod.GRAPHQLv4
+            : process.env.GITHUB_API_METHOD.toString() === 'rest'
+            ? ApiMethod.RESTv3
+            : ApiMethod.GRAPHQLv4
+          : ApiMethod.GRAPHQLv4, // default
+        baseUrl: process.env.GITHUB_BASE_URL || 'https://api.github.com',
         credentials: {
           password: process.env.GITHUB_PASSWORD,
           username: process.env.GITHUB_USERNAME,
