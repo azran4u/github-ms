@@ -7,12 +7,12 @@ export class Middlewares {
     this.logger = new Logger('Middlewares');
   }
 
-  public setRequestRecieveTime(
+  public setRequestReceiveTime(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,
   ) {
-    res.locals.t0 = new Date().getTime().toString();
+    res.locals.t0 = Date.now();
     next();
   }
 
@@ -21,14 +21,17 @@ export class Middlewares {
     res: express.Response,
     next: express.NextFunction,
   ) {
-    const t0 = +res.locals.t0;
-    const t1 = +res.locals.t1;
-    const t2 = +res.locals.t2;
-    const t3: number = new Date().getTime();
+    const t0 = res.locals.t0;
+    const t1 = res.locals.t1;
+    const t2 = res.locals.t2;
+    const t3 = Date.now();
 
-    this.logger.info(`time from rcv to start handle=${t1 - t0}ms`);
-    this.logger.info(`time of backend=${t2 - t1}ms`);
-    this.logger.info(`time from end of backend to response=${t3 - t2}ms`);
+    this.logger.info(
+      `endpoint: ${req.url} handle time=${t1 -
+        t0 +
+        t3 -
+        t2}ms backend time=${t2 - t1}ms`,
+    );
     next();
   }
 }

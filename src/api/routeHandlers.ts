@@ -15,17 +15,17 @@ export class RouteHandlers {
     res: express.Response,
     next: express.NextFunction,
   ) {
-    res.locals.t1 = new Date().getTime().toString();
+    res.locals.t1 = Date.now();
     this.githubConnector
       .getUser()
       .then((user) => {
-        res.locals.t2 = new Date().getTime().toString();
+        res.locals.t2 = Date.now();
         this.logger.info('fetched user');
         res.send(user);
         next();
       })
       .catch((error) => {
-        res.locals.t2 = new Date().getTime().toString();
+        res.locals.t2 = Date.now();
         res.send('could not fetch user');
         this.logger.error('could not fetch user');
         next();

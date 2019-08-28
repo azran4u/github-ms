@@ -1,3 +1,3 @@
-import { ApiServer } from './api';
+import { Server } from './api';
 
-new ApiServer().init();
+new Server().init();
