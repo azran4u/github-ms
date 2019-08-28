@@ -9,6 +9,9 @@ export interface IConfig {
   logger: {
     logLevel: string;
   };
+  server: {
+    port: number
+  }
 }
 
 export interface GitHubCredentials {
@@ -52,6 +55,9 @@ export class Config {
       logger: {
         logLevel: process.env.LOG_LEVEL || 'info',
       },
+      server: {
+        port: process.env.SERVER_PORT ? +process.env.SERVER_PORT : 3000,
+      }
     };
   }
 

@@ -1,2 +1,3 @@
-import { Controller } from './controller';
-Controller.init();
+import { ApiServer } from './api';
+
+new ApiServer().init();

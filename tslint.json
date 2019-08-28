@@ -11,7 +11,8 @@
     "member-ordering": false,
     "no-empty-interface": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "trailing-comma": false
   },
   "rulesDirectory": []
 }

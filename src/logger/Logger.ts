@@ -1,35 +1,30 @@
 import * as winston from 'winston';
 import { ILogger } from './ILogger';
+import { Config, IConfig } from '../config';
 
 export class Logger extends ILogger {
   private logger: winston.Logger;
+  private config: IConfig;
 
   public constructor(componentLabel: string) {
     super(componentLabel);
+    this.config = Config.getConfig();
     const myFormat = winston.format.printf(
       ({ level, message, label, timestamp }) => {
         return `${timestamp} [${label}] ${level}: ${message}`;
-      },
+      }
     );
     this.logger = winston.createLogger({
       level: 'info',
       defaultMeta: { label: this.label },
       format: winston.format.combine(
         winston.format.timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss.SSS',
+          format: 'YYYY-MM-DD HH:mm:ss.SSS'
         }),
-        myFormat,
+        myFormat
       ),
-      transports: [new winston.transports.Console({ level: 'info' })],
+      transports: [new winston.transports.Console({ level: this.config.logger.logLevel })]
     });
-    if (process.env.LOG_LEVEL === 'debug') {
-      this.logger.add(
-        new winston.transports.Console({
-          format: winston.format.simple(),
-          level: 'debug',
-        }),
-      );
-    }
   }
 
   public info(message: string): void {
