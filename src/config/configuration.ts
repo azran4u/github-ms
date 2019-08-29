@@ -9,8 +9,13 @@ export interface IConfig {
   logger: {
     logLevel: string;
   };
-  server: {
-    port: number;
+  api: {
+    rest: {
+      port: number;
+    },
+    graphql: {
+      port: number;
+    }
   };
 }
 
@@ -55,8 +60,13 @@ export class Config {
       logger: {
         logLevel: process.env.LOG_LEVEL || 'info'
       },
-      server: {
-        port: process.env.SERVER_PORT ? +process.env.SERVER_PORT : 3000
+      api:{
+        rest: {
+          port: process.env.REST_API_PORT ? +process.env.REST_API_PORT : 3000
+        },
+        graphql: {
+          port: process.env.GRAPHQL_API_PORT ? +process.env.GRAPHQL_API_PORT : 4000
+        }
       }
     };
   }

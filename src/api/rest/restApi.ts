@@ -25,8 +25,8 @@ export class RestApi {
     this.app.use(helmet());
     this.app.get('/', this.routeHandler.getUserHandler.bind(this.routeHandler));
     this.app.use(this.middlewares.calcPerformanceTimes.bind(this.middlewares));
-    this.server = this.app.listen(this.config.server.port, () =>
-      this.logger.info('Example app listening on port 3000!'),
+    this.server = this.app.listen(this.config.api.rest.port, () =>
+      this.logger.info(`RestApi server ready at port ${this.config.api.rest.port}`),
     );
   }
 
