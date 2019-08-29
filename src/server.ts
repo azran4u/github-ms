@@ -3,4 +3,4 @@ import { GraphqlApi } from './api/graphql';
 
 // console.log(graphqlServer);
 new RestApi().init();
-const a = new GraphqlApi();
+new GraphqlApi().init();
