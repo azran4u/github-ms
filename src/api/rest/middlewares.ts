@@ -1,5 +1,5 @@
 import express from 'express';
-import { Logger, ILogger } from '../logger';
+import { Logger, ILogger } from '../../logger';
 
 export class Middlewares {
   private logger: ILogger;

@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Server } from '../api';
+import { RestApi } from '../api/rest';
 import { Config } from '../config';
 
 const assert = chai.assert;
@@ -8,7 +8,7 @@ const assert = chai.assert;
 describe('api test', () => {
   it('request for /', (done) => {
     // Arrange
-    const server = new Server();
+    const server = new RestApi();
     server.init();
     const app = server.getApp();
     chai.use(chaiHttp);
@@ -27,7 +27,7 @@ describe('api test', () => {
   });
   it('request for invalid uri', (done) => {
     // Arrange
-    const server = new Server();
+    const server = new RestApi();
     server.init();
     const app = server.getApp();
     chai.use(chaiHttp);
@@ -49,7 +49,7 @@ describe('api test', () => {
     const githubUsername = process.env.GITHUB_USERNAME;
     process.env['GITHUB_USERNAME'] = 'no such user';
     Config.setConfig(Config.readEnvVars());
-    const server = new Server();
+    const server = new RestApi();
     server.init();
     const app = server.getApp();
     chai.use(chaiHttp);
@@ -70,7 +70,7 @@ describe('api test', () => {
   });
   it('verify helmet headers', (done) => {
     // Arrange
-    const server = new Server();
+    const server = new RestApi();
     server.init();
     const app = server.getApp();
     chai.use(chaiHttp);

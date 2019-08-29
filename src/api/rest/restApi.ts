@@ -1,11 +1,11 @@
 import express from 'express';
 import helmet from 'helmet';
-import { Logger, ILogger } from '../logger';
-import { IConfig, Config } from '../config';
+import { Logger, ILogger } from '../../logger';
+import { IConfig, Config } from '../../config';
 import { Middlewares, RouteHandlers } from '.';
 import * as http from 'http';
 
-export class Server {
+export class RestApi {
   private logger: ILogger;
   private config: IConfig;
   private routeHandler: RouteHandlers;

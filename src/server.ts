@@ -1,3 +1,3 @@
-import { Server } from './api';
+import { RestApi } from './api/rest';
 
-new Server().init();
+new RestApi().init();
