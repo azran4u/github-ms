@@ -4,7 +4,7 @@ import { GraphQLContext } from '../graphql';
 
 export const resolvers = {
   Query: {
-    async getUser(source, args, context, info: GraphQLResolveInfo) {
+    getUser(source, args, context, info: GraphQLResolveInfo) {
       return context.connector.getUser();
     }
   }
