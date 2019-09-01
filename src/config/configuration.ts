@@ -19,8 +19,7 @@ export interface IConfig {
   };
   db: {
     mongo: {
-      host: string;
-      port: number;
+      uri: string;
     };
   };
 }
@@ -78,8 +77,7 @@ export class Config {
       },
       db: {
         mongo: {
-          host: process.env.MONGODB_HOST || 'localhost',
-          port: process.env.MONGODB_PORT ? +process.env.MONGODB_PORT : 27017,
+          uri: process.env.MONGODB_URI || 'localhost',
         }
       }
     };

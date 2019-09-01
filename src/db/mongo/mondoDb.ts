@@ -1,76 +1,67 @@
 import { IConfig, Config } from '../../config';
 import { ILogger, Logger } from '../../logger';
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
+import blogPostModel, { IBlogPost, IComment } from './schema';
 
 export class MongoDB {
   private logger: ILogger;
   private config: IConfig;
-  private connection: mongoose.Connection;
+
   constructor() {
     this.logger = new Logger('mongoDB');
     this.config = Config.getConfig();
   }
-  public init() {
-    mongoose
-      .connect(
-        `mongodb://${this.config.db.mongo.host}:${this.config.db.mongo.port}`,
-        {
-          useNewUrlParser: false,
-        },
-      )
-      .then(() => {
-        this.logger.info(`connected to mongodb`);
-        this.connection = mongoose.connection;
-      })
-      .catch((err) => {
-        this.logger.info(`could not connect to mongodb. ${err.message}`);
+
+  private async connect(): Promise<boolean> {
+    try {
+      mongoose.connect(this.config.db.mongo.uri, {
+        useNewUrlParser: true
       });
-    const ObjectId = Schema.Types.ObjectId;
-
-    const Comment = new Schema({
-      name: { type: String, default: 'hahaha' },
-      age: { type: Number, min: 18, index: true },
-      bio: { type: String, match: /[a-z]/ },
-      date: { type: Date, default: Date.now },
-    });
-
-    const BlogPostSchema = new Schema({
-      author: ObjectId,
-      title: String,
-      body: String,
-      date: Date,
-      comments: [Comment],
-    });
-    const BlogPost = mongoose.model<IBlogPost>('BlogPosts', BlogPostSchema);
-    const post = new BlogPost();
-    post.author = 'eyal';
-    post.title = 'my first blog';
-    post.body = 'the body of my first blog';
-    post.date = Date.toString();
-    post.comments.push({
-      name: 'a',
-      age: 22,
-      bio: 'abc',
-    });
-    post.save((err) => {
-      if (!err) {
-        console.log('Success!');
-      }
-    });
+      mongoose.set('useCreateIndex', true);
+      return true;
+    } catch {
+      return false;
+    }
   }
-}
 
-interface IComment {
-  name: string;
-  age: number;
-  bio: string;
-  date?: string;
-}
+  public async createBlogPost(n: number): Promise<boolean> {
+    try {
+      for (let i = 0; i < n; i++) {
+        const blogPost = new blogPostModel();
+        blogPost.author = 'my author name';
+        blogPost.title = 'my title';
+        blogPost.body = 'my post body';
+        blogPost.date = Date.toString();
+        await blogPost.save();
+      }
+      this.logger.info('saved data to mongo');
+      return true;
+    } catch (err) {
+      this.logger.error('could not create blog post');
+      this.logger.debug(err);
+      return false;
+    }
+  }
 
-interface IBlogPost extends Document {
-  author: string;
-  title: string;
-  body: string;
-  date: string;
-  comments: IComment[];
+  public async readAllBlogPosts(): Promise<IBlogPost[]> {
+    try {
+      const res = await blogPostModel.find();
+      this.logger.info(`number of blog posts found: ${res.length}`);
+      return res;
+    } catch (err) {
+      this.logger.error('error while finding blog posts');
+      this.logger.debug(err);
+    }
+  }
+
+  public async init(): Promise<boolean> {
+    try {
+      await this.connect();
+      this.logger.info(`connected to mongodb`);
+      return true;
+    } catch (err) {
+      this.logger.info(`could not connect to mongodb. ${err.message}`);
+      return false;
+    }
+  }
 }
