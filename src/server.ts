@@ -7,8 +7,10 @@ class Server {
   public static async start(): Promise<void> {
     const logger: ILogger = new Logger('Server');
     try {
-      await new MongoDBServerInMemory().init();
+      const inMemoryMongoDb = new MongoDBServerInMemory();
+      await inMemoryMongoDb.init();
       await new MongoDbPlayground().run();
+      await inMemoryMongoDb.finish();
       process.exit();
       //   new RestApi().init();
       //   new GraphqlApi().init();
