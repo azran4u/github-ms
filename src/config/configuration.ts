@@ -17,6 +17,12 @@ export interface IConfig {
       port: number;
     };
   };
+  db: {
+    mongo: {
+      host: string;
+      port: number;
+    };
+  };
 }
 
 export interface GitHubCredentials {
@@ -27,7 +33,7 @@ export interface GitHubCredentials {
 
 export enum ApiMethod {
   RESTv3,
-  GRAPHQLv4
+  GRAPHQLv4,
 }
 
 export class Config {
@@ -54,20 +60,26 @@ export class Config {
         credentials: {
           password: process.env.GITHUB_PASSWORD,
           username: process.env.GITHUB_USERNAME,
-          token: process.env.GITHUB_TOKEN
-        }
+          token: process.env.GITHUB_TOKEN,
+        },
       },
       logger: {
-        logLevel: process.env.LOG_LEVEL || 'info'
+        logLevel: process.env.LOG_LEVEL || 'info',
       },
       api: {
         rest: {
-          port: process.env.REST_API_PORT ? +process.env.REST_API_PORT : 3000
+          port: process.env.REST_API_PORT ? +process.env.REST_API_PORT : 3000,
         },
         graphql: {
           port: process.env.GRAPHQL_API_PORT
             ? +process.env.GRAPHQL_API_PORT
-            : 4000
+            : 4000,
+        },
+      },
+      db: {
+        mongo: {
+          host: process.env.MONGODB_HOST || 'localhost',
+          port: process.env.MONGODB_PORT ? +process.env.MONGODB_PORT : 27017,
         }
       }
     };
