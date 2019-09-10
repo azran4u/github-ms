@@ -2,6 +2,8 @@ import { IConfig, Config } from '../../config';
 import { ILogger, Logger } from '../../logger';
 import blogPostModel, { IBlogPost } from './schema';
 import { MongoDB } from './mondoDb';
+import { Story, Person } from '../mongo';
+import mongoose from 'mongoose';
 
 export class MongoDbPlayground {
   private logger: ILogger;
@@ -19,21 +21,24 @@ export class MongoDbPlayground {
       await this.mongod.init();
       await this.createBlogPost(100);
       await this.readAllBlogPosts();
+      await this.createPerson();
+      const data = await this.readPerson();
       await this.mongod.finish();
     } catch (err) {
-        this.logger.error('could not run playground');
-        this.logger.debug(err);
-      }
+      this.logger.error('could not run playground');
+      this.logger.debug(err);
+    }
   }
 
   private async createBlogPost(n: number): Promise<void> {
     try {
       for (let i = 0; i < n; i++) {
-        const blogPost = new blogPostModel();
-        blogPost.author = 'my author name';
-        blogPost.title = 'my title';
-        blogPost.body = 'my post body';
-        blogPost.date = Date.toString();
+        const blogPost = new blogPostModel({
+          author: 'my author name',
+          title: 'my title',
+          body: 'my post body',
+          date: Date.toString(),
+        });
         await blogPost.save();
       }
       this.logger.info('saved data to mongo');
@@ -52,5 +57,24 @@ export class MongoDbPlayground {
       this.logger.error('error while finding blog posts');
       this.logger.debug(err);
     }
+  }
+
+  public async createPerson(): Promise<void> {
+    const author = new Person({
+      _id: new mongoose.Types.ObjectId(),
+      name: 'Ian Fleming',
+      age: 50,
+    });
+
+    const story1 = new Story({
+      title: 'Casino Royale',
+      author: author._id, // assign the _id from the person
+    });
+
+    await Promise.all([author.save(), story1.save()]);
+  }
+
+  public async readPerson(): Promise<mongoose.Document[]> {
+    return await Story.find().populate('author');
   }
 }

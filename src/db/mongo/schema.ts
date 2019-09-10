@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+mongoose.set('useCreateIndex', true);
+
 export interface IComment {
   name: string;
   age: number;
@@ -21,7 +23,7 @@ export const CommentSchema = new Schema({
   name: { type: String, default: 'hahaha' },
   age: { type: Number, min: 18, index: true },
   bio: { type: String, match: /[a-z]/ },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
 });
 
 export const BlogPostSchema = new Schema({
@@ -29,7 +31,7 @@ export const BlogPostSchema = new Schema({
   title: String,
   body: String,
   date: String,
-  comments: [CommentSchema]
+  comments: [CommentSchema],
 });
 
 export default mongoose.model<IBlogPost>('BlogPosts', BlogPostSchema);
